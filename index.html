@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stock Price Predictor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/brain.js@2.0.0-beta.2/dist/brain-browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>📈 Stock Price Predictor</h1>
+    
+    <div class="input-section">
+      <label for="stockSymbol">Enter Stock Symbol:</label>
+      <input type="text" id="stockSymbol" placeholder="e.g. AAPL, GOOGL, TSLA" value="GOOGL">
+      
+      <div class="button-group">
+        <button id="fetchBtn">Fetch Historical Data</button>
+        <button id="predictBtn" disabled>Predict Next Price</button>
+      </div>
+    </div>
+
+    <div id="status"></div>
+    
+    <div class="chart-container">
+      <h2 id="chartTitle">Stock Price Chart</h2>
+      <canvas id="stockChart"></canvas>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
