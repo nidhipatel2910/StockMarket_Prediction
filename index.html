@@ -2,38 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Stock Price Predictor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/brain.js@2.0.0-beta.2/dist/brain-browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>📈 Stock Price Predictor</h1>
-      <p class="subtitle">AI-powered stock price prediction using neural networks</p>
-    </header>
-    
-    <main class="main-content">
-      <div class="input-section">
-        <label for="stockSymbol">Stock Symbol</label>
-        <input type="text" id="stockSymbol" placeholder="e.g. AAPL, GOOGL, TSLA" value="">
-        
+  <nav class="navbar">
+    <div class="nav-logo">📊 FinDash</div>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">Predict</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Open navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+  <div class="dashboard">
+    <section class="dashboard-controls dashboard-card">
+      <form id="inputForm" class="dashboard-form">
+        <div class="input-group">
+          <label for="stockSymbol">Stock Symbol</label>
+          <input type="text" id="stockSymbol" placeholder="e.g. AAPL, GOOGL, TSLA" value="">
+        </div>
+        <div class="input-group">
+          <label for="dateRange">Date Range</label>
+          <select id="dateRange">
+            <option value="30">30 days</option>
+            <option value="60">60 days</option>
+            <option value="90">90 days</option>
+          </select>
+        </div>
         <div class="button-group">
-          <button id="fetchBtn">📊 Fetch Historical Data</button>
-          <button id="predictBtn" disabled>🔮 Predict Next Price</button>
+          <button id="fetchBtn" type="button"><i class="fas fa-download"></i> Fetch Historical Data <span class="spinner" id="fetchSpinner"></span></button>
+          <button id="predictBtn" type="button" disabled><i class="fas fa-magic"></i> Predict Next Price <span class="spinner" id="predictSpinner"></span></button>
+        </div>
+      </form>
+      <div id="status">Ready to analyze stocks</div>
+    </section>
+    <section class="dashboard-chart dashboard-card">
+      <h2 id="chartTitle">Stock Price Chart</h2>
+      <canvas id="stockChart"></canvas>
+    </section>
+    <section class="stock-list-card dashboard-card">
+      <h2>Top Stocks (Profit/Loss)</h2>
+      <div class="stock-squares">
+        <div class="stock-square profit">
+          <div class="stock-symbol">AAPL</div>
+          <div class="stock-change">+1.11%</div>
+        </div>
+        <div class="stock-square loss">
+          <div class="stock-symbol">GOOGL</div>
+          <div class="stock-change">-0.51%</div>
+        </div>
+        <div class="stock-square profit">
+          <div class="stock-symbol">TSLA</div>
+          <div class="stock-change">+1.67%</div>
+        </div>
+        <div class="stock-square profit">
+          <div class="stock-symbol">MSFT</div>
+          <div class="stock-change">+0.27%</div>
+        </div>
+        <div class="stock-square loss">
+          <div class="stock-symbol">AMZN</div>
+          <div class="stock-change">-0.45%</div>
         </div>
       </div>
-
-      <div id="status">Ready to analyze stocks</div>
-      
-      <div class="chart-container">
-        <h2 id="chartTitle">Stock Price Chart</h2>
-        <canvas id="stockChart"></canvas>
-      </div>
-    </main>
+    </section>
   </div>
   <script src="app.js"></script>
 </body>
