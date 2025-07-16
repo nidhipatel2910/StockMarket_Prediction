@@ -5,29 +5,35 @@
   <title>Stock Price Predictor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/brain.js@2.0.0-beta.2/dist/brain-browser.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>📈 Stock Price Predictor</h1>
+    <header class="header">
+      <h1>📈 Stock Price Predictor</h1>
+      <p class="subtitle">AI-powered stock price prediction using neural networks</p>
+    </header>
     
-    <div class="input-section">
-      <label for="stockSymbol">Enter Stock Symbol:</label>
-      <input type="text" id="stockSymbol" placeholder="e.g. AAPL, GOOGL, TSLA" value="GOOGL">
-      
-      <div class="button-group">
-        <button id="fetchBtn">Fetch Historical Data</button>
-        <button id="predictBtn" disabled>Predict Next Price</button>
+    <main class="main-content">
+      <div class="input-section">
+        <label for="stockSymbol">Stock Symbol</label>
+        <input type="text" id="stockSymbol" placeholder="e.g. AAPL, GOOGL, TSLA" value="">
+        
+        <div class="button-group">
+          <button id="fetchBtn">📊 Fetch Historical Data</button>
+          <button id="predictBtn" disabled>🔮 Predict Next Price</button>
+        </div>
       </div>
-    </div>
 
-    <div id="status"></div>
-    
-    <div class="chart-container">
-      <h2 id="chartTitle">Stock Price Chart</h2>
-      <canvas id="stockChart"></canvas>
-    </div>
+      <div id="status">Ready to analyze stocks</div>
+      
+      <div class="chart-container">
+        <h2 id="chartTitle">Stock Price Chart</h2>
+        <canvas id="stockChart"></canvas>
+      </div>
+    </main>
   </div>
   <script src="app.js"></script>
 </body>

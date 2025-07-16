@@ -23,6 +23,11 @@ function prepareData(prices) {
   return data;
 }
 
+function updateStatus(message, isError = false) {
+  statusDiv.textContent = message;
+  statusDiv.className = isError ? 'error' : '';
+}
+
 function renderChart(prices, dates = [], predicted = null) {
   // Use dates if available, otherwise use generic labels
   const labels = dates.length > 0 
@@ -33,10 +38,13 @@ function renderChart(prices, dates = [], predicted = null) {
     {
       label: 'Historical Prices',
       data: prices,
-      borderColor: '#1976d2',
-      backgroundColor: 'rgba(25, 118, 210, 0.08)',
-      tension: 0.2,
-      pointRadius: 4,
+      borderColor: '#667eea',
+      backgroundColor: 'rgba(102, 126, 234, 0.1)',
+      tension: 0.4,
+      pointRadius: 5,
+      pointBackgroundColor: '#667eea',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 2,
       fill: false,
     }
   ];
@@ -46,10 +54,12 @@ function renderChart(prices, dates = [], predicted = null) {
     datasets.push({
       label: 'Predicted Price',
       data: Array(prices.length).fill(null).concat([predicted]),
-      borderColor: '#d32f2f',
-      backgroundColor: '#d32f2f',
-      pointRadius: 7,
-      pointBackgroundColor: '#d32f2f',
+      borderColor: '#f56565',
+      backgroundColor: '#f56565',
+      pointRadius: 8,
+      pointBackgroundColor: '#f56565',
+      pointBorderColor: '#fff',
+      pointBorderWidth: 3,
       showLine: false,
       fill: false,
       type: 'line',
@@ -69,20 +79,62 @@ function renderChart(prices, dates = [], predicted = null) {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
-          legend: { display: true },
-          tooltip: { enabled: true }
+          legend: { 
+            display: true,
+            position: 'top',
+            labels: {
+              usePointStyle: true,
+              padding: 20,
+              font: {
+                size: 12,
+                weight: '600'
+              }
+            }
+          },
+          tooltip: { 
+            enabled: true,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: '#667eea',
+            borderWidth: 1
+          }
         },
         scales: {
           y: {
             beginAtZero: false,
-            title: { display: true, text: 'Price ($)' }
+            title: { 
+              display: true, 
+              text: 'Price ($)',
+              font: {
+                size: 14,
+                weight: '600'
+              }
+            },
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            }
           },
           x: {
-            title: { display: true, text: 'Date' },
+            title: { 
+              display: true, 
+              text: 'Date',
+              font: {
+                size: 14,
+                weight: '600'
+              }
+            },
             ticks: {
               maxRotation: 45,
-              minRotation: 45
+              minRotation: 45,
+              font: {
+                size: 11
+              }
+            },
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
             }
           }
         }
@@ -95,11 +147,11 @@ function renderChart(prices, dates = [], predicted = null) {
 fetchBtn.onclick = async function() {
   const symbol = stockSymbolInput.value.trim().toUpperCase();
   if (!symbol) {
-    statusDiv.textContent = 'Please enter a stock symbol.';
+    updateStatus('Please enter a stock symbol', true);
     return;
   }
   
-  statusDiv.textContent = 'Fetching real-time data...';
+  updateStatus('🔄 Fetching real-time market data...');
   fetchBtn.disabled = true;
   
   try {
@@ -107,20 +159,20 @@ fetchBtn.onclick = async function() {
     const data = await response.json();
     
     if (data.error) {
-      statusDiv.textContent = `Error: ${data.error}`;
+      updateStatus(`❌ Error: ${data.error}`, true);
       fetchBtn.disabled = false;
       return;
     }
     
     historicalPrices = data.prices;
     historicalDates = data.dates;
-    chartTitle.textContent = `${data.symbol} Stock Prices`;
-    statusDiv.textContent = `Showing latest prices for ${data.symbol}`;
+    chartTitle.textContent = `${data.symbol} Stock Price Analysis`;
+    updateStatus(`✅ Successfully loaded ${data.symbol} data (${data.prices.length} days)`);
     predictBtn.disabled = false;
     renderChart(historicalPrices, historicalDates);
     
   } catch (err) {
-    statusDiv.textContent = 'Error fetching data. Make sure the server is running on localhost:3000';
+    updateStatus('❌ Connection error. Please ensure the server is running on localhost:3000', true);
     console.error('Fetch error:', err);
   } finally {
     fetchBtn.disabled = false;
@@ -130,11 +182,11 @@ fetchBtn.onclick = async function() {
 // Predict next price
 predictBtn.onclick = function() {
   if (historicalPrices.length < 3) {
-    statusDiv.textContent = 'Need at least 3 data points for prediction.';
+    updateStatus('❌ Need at least 3 data points for prediction', true);
     return;
   }
   
-  statusDiv.textContent = 'Training model and predicting...';
+  updateStatus('🧠 Training AI model and analyzing patterns...');
   predictBtn.disabled = true;
   
   setTimeout(() => {
@@ -155,7 +207,7 @@ predictBtn.onclick = function() {
     const output = net.run(input);
     const predicted = Math.round(output[0] * 1000 * 100) / 100;
     
-    statusDiv.textContent = `Predicted next price: $${predicted}`;
+    updateStatus(`🎯 Predicted next price: $${predicted}`);
     renderChart(historicalPrices, historicalDates, predicted);
     predictBtn.disabled = false;
   }, 1500);
